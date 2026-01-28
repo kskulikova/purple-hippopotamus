@@ -1,6 +1,6 @@
 import { AirQualityData, WeatherData } from '../models';
 
-// """Calculate outdoor activity score (0-100)"""
+// Calculate outdoor activity score (0-100)
 export function calculateOutdoorScore(weather: WeatherData, air: AirQualityData) {
   let score = 100;
 

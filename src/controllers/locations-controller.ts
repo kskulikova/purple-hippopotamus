@@ -1,11 +1,6 @@
-import { Request, Response } from 'express';
 import { fetchLocations } from '../repositories/user-preferences-repository';
 
-export const getLocations = async (
-  // Types: Request<Params, ResBody, ReqBody, ReqQuery>
-  req: Request,
-  res: Response
-) => {
+export const getLocations = async () => {
   try {
     const locations = fetchLocations();
     return JSON.stringify({ locations: locations });

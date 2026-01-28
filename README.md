@@ -7,3 +7,4 @@
 
 - If userId is missing from the incoming request, generate a temporary one using a "GUEST" prefix
 - Expand lat & lon parameter validation to check if they are in a valid coordinates range
+- Return 502 (Bad Gateway) when external API calls fail

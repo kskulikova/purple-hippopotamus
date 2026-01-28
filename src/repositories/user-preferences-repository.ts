@@ -1,34 +1,28 @@
-import { getDb } from '../config/dbConfig';
+import db from '../config/dbConfig';
+
+interface PreferenceRow {
+  preference_type: string;
+  preference_value: string;
+}
+
+interface LocationRow {
+  location_id: string;
+}
 
 export async function fetchPreferences(lat: number, lon: number) {
-  const db = await getDb();
-  try {
-    const locationId = `${lat.toFixed(2)},${lon.toFixed(2)}`;
+  const locationId = `${lat.toFixed(2)},${lon.toFixed(2)}`;
 
-    type Row = { preference_type: string; preference_value: string };
+  const rows = db
+    .prepare('SELECT preference_type, preference_value FROM user_preferences WHERE location_id = ?')
+    .all(locationId) as PreferenceRow[];
 
-    const rows = await db.all<Row[]>(
-      'SELECT preference_type, preference_value FROM user_preferences WHERE location_id = ?',
-      [locationId]
-    );
-
-    return { preferences: rows };
-  } finally {
-    await db.close();
-  }
+  return { preferences: rows };
 }
 
 export async function fetchLocations() {
-  const db = await getDb();
-  try {
-    type Row = { location_id: string };
+  const rows = db.prepare('SELECT DISTINCT location_id FROM user_preferences LIMIT 100').all() as LocationRow[];
 
-    const rows = await db.all<Row[]>('SELECT DISTINCT location_id FROM user_preferences LIMIT 100');
+  const locations = rows.map((row) => row.location_id);
 
-    const locations = rows.map((row) => row.location_id);
-
-    return { locations: locations };
-  } finally {
-    await db.close();
-  }
+  return { locations: locations };
 }
