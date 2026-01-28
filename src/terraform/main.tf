@@ -1,0 +1,45 @@
+terraform {
+    required_providers {
+        digitalocean = {
+            source = "digitalocean/digitalocean"
+            version= "~> 2.0"
+        }
+    }
+}
+
+data "digitalocean_ssh_key" "my_key" {
+  name = var.public_key_name
+}
+
+resource "digitalocean_droplet" "docker_server" {
+  image  = "ubuntu-24-04-x64"
+  name   = "docker-host"
+  region = "nyc3"
+  size   = "s-1vcpu-1gb"
+  ssh_keys = [data.digitalocean_ssh_key.my_key.id]
+
+  # Script that runs automatically on the first boot
+  user_data = <<-EOF
+            #!/bin/bash
+            set -e
+            export DEBIAN_FRONTEND=noninteractive
+
+            apt-get update
+            apt-get install -y ca-certificates curl gnupg
+
+            install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+            chmod a+r /etc/apt/keyrings/docker.gpg
+
+            echo \
+                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+                tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+            apt-get update
+            apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+            systemctl enable docker
+            systemctl start docker
+        EOF
+}
