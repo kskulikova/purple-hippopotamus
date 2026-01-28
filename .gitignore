@@ -59,6 +59,8 @@ MANIFEST
 *.sqlite
 *.sqlite3
 *.db-journal
+*.db-shm
+*.db-wal
 
 ### --- Environment & Secrets --- ###
 .env
