@@ -1,0 +1,43 @@
+{
+  "name": "skypulse",
+  "version": "0.1.0",
+  "description": "SkyPulse backend - outdoor activity score API",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "skypulse": "npm run start"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "sqlite3": "^5.1.6",
+    "sqlite": "^5.1.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.2"
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
