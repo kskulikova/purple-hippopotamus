@@ -5,10 +5,6 @@ interface PreferenceRow {
   preference_value: string;
 }
 
-interface LocationRow {
-  location_id: string;
-}
-
 export async function fetchPreferences(lat: number, lon: number) {
   const locationId = `${lat.toFixed(2)},${lon.toFixed(2)}`;
 
@@ -20,9 +16,5 @@ export async function fetchPreferences(lat: number, lon: number) {
 }
 
 export async function fetchLocations() {
-  const rows = db.prepare('SELECT DISTINCT location_id FROM user_preferences LIMIT 100').all() as LocationRow[];
-
-  const locations = rows.map((row) => row.location_id);
-
-  return { locations: locations };
+  return db.prepare('SELECT DISTINCT location_id FROM user_preferences LIMIT 100').pluck().all() as string[];
 }

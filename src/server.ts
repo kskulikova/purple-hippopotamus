@@ -1,14 +1,14 @@
 import app from './app';
 import dotenv from 'dotenv';
 import { initDatabase } from './config/dbConfig';
-import { APP_PORT } from './constants/constants';
+import { APP_PORT, HOST } from './constants/constants';
 
 dotenv.config();
 
 async function startServer() {
   try {
-    await initDatabase();
-    app.listen(APP_PORT, () => {
+    initDatabase();
+    app.listen(APP_PORT, HOST, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
   } catch (error) {

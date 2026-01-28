@@ -17,9 +17,9 @@ export interface AirQualityData {
 export const createWeatherResponse = (apiData?: any, error?: string): ApiResponse<WeatherData> => ({
   error: error ?? null,
   data: {
-    temperature: apiData?.currentWeather?.temperature ?? 0,
-    windspeed: apiData?.currentWeather?.windspeed ?? 0,
-    weathercode: apiData?.currentWeather?.weathercode ?? 0,
+    temperature: apiData?.current_weather?.temperature ?? 0,
+    windspeed: apiData?.current_weather?.windspeed ?? 0,
+    weathercode: apiData?.current_weather?.weathercode ?? 0,
   },
 });
 
