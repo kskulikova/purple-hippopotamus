@@ -1,9 +1,6 @@
 import app from './app';
-import dotenv from 'dotenv';
 import { initDatabase } from './config/dbConfig';
 import { APP_PORT, HOST } from './constants/constants';
-
-dotenv.config();
 
 async function startServer() {
   try {
