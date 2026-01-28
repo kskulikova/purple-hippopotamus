@@ -90,6 +90,8 @@ export function initDatabase() {
   `);
 
   seedDatabase();
+
+  return db;
 }
 
 function seedDatabase() {
