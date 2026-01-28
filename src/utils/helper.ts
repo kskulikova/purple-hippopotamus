@@ -1,12 +1,11 @@
-import { GetAirQualityResponse, GetWeatherResponse } from '../models';
+import { AirQualityData, WeatherData } from '../models';
 
 // """Calculate outdoor activity score (0-100)"""
-export function calculateOutdoorScore(weather: GetWeatherResponse, air: GetAirQualityResponse) {
+export function calculateOutdoorScore(weather: WeatherData, air: AirQualityData) {
   let score = 100;
 
-  const current = weather.currentWeather ?? {};
-  const temp = current.temperature ?? 20;
-  const wind = current.windspeed ?? 0;
+  const temp = weather.temperature ?? 20;
+  const wind = weather.windspeed ?? 0;
 
   // Temperature penalty (ideal: 18-24°C)
   if (temp < 10 || temp > 32) {
@@ -22,10 +21,8 @@ export function calculateOutdoorScore(weather: GetWeatherResponse, air: GetAirQu
     score -= 10;
   }
 
-  // Air quality factors
-  const currentAq = air.current ?? {};
-  const pm25 = currentAq.pm2_5 ?? 0;
-  const pm10 = currentAq.pm10 ?? 0;
+  const pm25 = air.pm2_5 ?? 0;
+  const pm10 = air.pm10 ?? 0;
 
   // PM2.5 penalty (WHO guideline: <15 μg/m³)
   if (pm25 > 50) {

@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import { LatLonRequestParams } from '../models';
 import { fetchLocations } from '../repositories/user-preferences-repository';
 
 export const getLocations = async (
   // Types: Request<Params, ResBody, ReqBody, ReqQuery>
-  req: Request<LatLonRequestParams, any, any, LatLonRequestParams>,
+  req: Request,
   res: Response
 ) => {
   try {

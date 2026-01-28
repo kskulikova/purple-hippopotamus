@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path = require('path');
+
 dotenv.config();
 
 // Use the ENV variable if it exists, otherwise fallback to a default value

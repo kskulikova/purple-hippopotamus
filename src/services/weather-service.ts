@@ -4,9 +4,9 @@ import {
   ANALYTICS_ENDPOINT_URL,
   ANALYTICS_API_KEY,
 } from '../constants/constants';
-import { AirQualityResponse, GetAirQualityResponse, GetWeatherResponse, WeatherResponse } from '../models';
+import { AirQualityData, ApiResponse, createAirQualityResponse, createWeatherResponse, WeatherData } from '../models';
 
-export async function getAirQuality(lat: number, lon: number): Promise<GetAirQualityResponse> {
+export async function getAirQuality(lat: number, lon: number): Promise<ApiResponse<AirQualityData>> {
   try {
     const response = await fetch(`${AIR_QUALITY_API_URL}?latitude=${lat}&longitude=${lon}&current=pm10,pm2_5`);
 
@@ -16,14 +16,14 @@ export async function getAirQuality(lat: number, lon: number): Promise<GetAirQua
 
     const responseData = await response.json();
 
-    return new AirQualityResponse(responseData);
+    return createAirQualityResponse(responseData);
   } catch (error: any) {
     console.error('Error fetching Air Quality', error);
-    return new AirQualityResponse(null, error.message);
+    return createAirQualityResponse(null, error.message);
   }
 }
 
-export async function getWeather(lat: number, lon: number): Promise<GetWeatherResponse> {
+export async function getWeather(lat: number, lon: number): Promise<ApiResponse<WeatherData>> {
   try {
     const response = await fetch(`${WEATHER_API_URL}?latitude=${lat}&longitude=${lon}&current_weather=true`);
 
@@ -33,10 +33,10 @@ export async function getWeather(lat: number, lon: number): Promise<GetWeatherRe
 
     const responseData = await response.json();
 
-    return new WeatherResponse(responseData);
+    return createWeatherResponse(responseData);
   } catch (error: any) {
     console.error('Error fetching Weather', error);
-    return new WeatherResponse(null, error.message);
+    return createWeatherResponse(null, error.message);
   }
 }
 
