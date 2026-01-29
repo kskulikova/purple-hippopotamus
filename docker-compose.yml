@@ -9,4 +9,5 @@ services:
         required: false
     environment:
       - NODE_ENV=production
+      - SEED_DB=${SEED_DB:-false}
     restart: always
