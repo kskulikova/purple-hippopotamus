@@ -1,4 +1,4 @@
-import db from '../config/dbConfig';
+import db from '../db/dbConfig';
 
 interface PreferenceRow {
   preference_type: string;

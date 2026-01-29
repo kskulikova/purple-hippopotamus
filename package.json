@@ -10,7 +10,8 @@
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "skypulse": "npm run start"
+    "skypulse": "npm run start",
+    "seed": "ts-node-dev --respawn --transpile-only src/db/seed.ts"
   },
   "dependencies": {
     "axios": "^1.6.0",

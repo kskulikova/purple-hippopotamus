@@ -1,8 +1,5 @@
-import Database from 'better-sqlite3';
 import { DB_PATH } from '../constants/constants';
-
-const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
+import db, { initDatabase } from './dbConfig';
 
 type City = [string, string];
 
@@ -45,7 +42,7 @@ const sample = <T>(array: readonly T[], size: number): T[] => {
   return [...array].sort(() => 0.5 - Math.random()).slice(0, size);
 };
 
-export function getRandomValue(prefType: string): string {
+function getRandomValue(prefType: string): string {
   switch (prefType) {
     case 'activity_type':
       return choice(ACTIVITY_VALUES);
@@ -66,7 +63,7 @@ export function getRandomValue(prefType: string): string {
   }
 }
 
-export function generateLocationVariations(baseLat: number, baseLon: number, count: number = 10): string[] {
+function generateLocationVariations(baseLat: number, baseLon: number, count: number = 10): string[] {
   const locations: string[] = [];
   for (let i = 0; i < count; i++) {
     const lat = baseLat + getRandomUniform(-0.5, 0.5);
@@ -76,25 +73,7 @@ export function generateLocationVariations(baseLat: number, baseLon: number, cou
   return locations;
 }
 
-export function initDatabase() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS user_preferences (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id TEXT NOT NULL,
-      location_id TEXT NOT NULL,
-      preference_type TEXT NOT NULL,
-      preference_value TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-
-  seedDatabase();
-
-  return db;
-}
-
-function seedDatabase() {
+export function seedData() {
   // Clear existing data
   db.prepare('DELETE FROM user_preferences').run();
 
@@ -138,4 +117,17 @@ function seedDatabase() {
   console.log(`Created ${result.count} records in ${DB_PATH}`);
 }
 
-export default db;
+// --- Execution Block ---
+// Runs only when the file is executed directly (e.g., via npm run seed)
+if (require.main === module) {
+  try {
+    initDatabase();
+    seedData();
+    console.log('Database seeding complete.');
+    db.close();
+    process.exit(0);
+  } catch (error) {
+    console.error('Seeding failed:', error);
+    process.exit(1);
+  }
+}
