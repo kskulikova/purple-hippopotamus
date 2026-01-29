@@ -54,11 +54,9 @@ export const getActivityScore = async (req: Request<{}, any, any, ActivityScoreQ
     const weather = weatherResponse.data;
     const airQuality = airQualityResponse.data;
 
+    const preferences = await fetchPreferences(lat, lon, userId);
     const score = calculateOutdoorScore(weather, airQuality);
-    const recommendation = getRecommendation(score);
-    const preferences = await fetchPreferences(lat, lon);
-
-    //TODO: apply preferences
+    const recommendation = getRecommendation(score, preferences);
 
     // Save statistics to analytics
     await saveStatistics(userId, lat, lon, score);

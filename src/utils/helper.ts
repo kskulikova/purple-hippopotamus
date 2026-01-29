@@ -1,4 +1,4 @@
-import { AirQualityData, WeatherData } from '../models';
+import { AirQualityData, Preference, WeatherData } from '../models';
 
 // Calculate outdoor activity score (0-100)
 export function calculateOutdoorScore(weather: WeatherData, air: AirQualityData) {
@@ -43,13 +43,15 @@ export function calculateOutdoorScore(weather: WeatherData, air: AirQualityData)
   return Math.max(0, Math.min(100, score));
 }
 
-export function getRecommendation(score: number) {
-  // Apply user preference adjustments - ??
-  let recommendation = 'Good conditions for outdoor activities';
+export function getRecommendation(score: number, preferences: Preference[]) {
+  const activity =
+    preferences.find((p) => p.preference_type === 'activity_type')?.preference_value ?? 'outdoor activities';
+
+  let recommendation = `Good conditions for ${activity}`;
   if (score < 50) {
-    recommendation = 'Consider indoor activities today';
+    recommendation = `Consider moving your ${activity} indoors today`;
   } else if (score < 70) {
-    recommendation = 'Moderate conditions - light outdoor activities recommended';
+    recommendation = `Moderate conditions - light ${activity} recommended`;
   }
   return recommendation;
 }

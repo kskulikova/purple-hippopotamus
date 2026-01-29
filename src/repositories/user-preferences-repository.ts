@@ -1,18 +1,14 @@
 import db from '../db/dbConfig';
+import { Preference } from '../models';
 
-interface PreferenceRow {
-  preference_type: string;
-  preference_value: string;
-}
-
-export async function fetchPreferences(lat: number, lon: number) {
+export async function fetchPreferences(lat: number, lon: number, userId: string) {
   const locationId = `${lat.toFixed(2)},${lon.toFixed(2)}`;
 
   const rows = db
-    .prepare('SELECT preference_type, preference_value FROM user_preferences WHERE location_id = ?')
-    .all(locationId) as PreferenceRow[];
+    .prepare('SELECT preference_type, preference_value FROM user_preferences WHERE user_id = ? AND location_id = ?')
+    .all(userId, locationId) as Preference[];
 
-  return { preferences: rows };
+  return rows;
 }
 
 export async function fetchLocations() {
